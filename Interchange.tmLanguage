@@ -327,7 +327,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?i:\b(?:(IF|END|INCLUDE|ELSE|ELSIF|FOREACH|FILTER|SCRATCH|SET|PERL|COMMENT|TEMPLATE|TMP|SETI|LOOP|VALUE(S)?|SESSION|ERROR|NAME|DATA|OBJECT|BOUNCE|CGI|CALC|CALCN|CURRENCY|L|LOC|AREA))\b)</string>
+					<string>(?i:\b(?:(IF|END|INCLUDE|ELSE|ELSIF|FOREACH|FILTER|SCRATCH|SET|PERL|COMMENT|TEMPLATE|TMP|SETI|LOOP|VALUE(S)?|SESSION|ERROR|NAME|DATA|OBJECT|BOUNCE|CGI|CALC|CALCN|CURRENCY|L|LOC|AREA|FNET_BUTTON))\b)</string>
 					<key>name</key>
 					<string>keyword.control.tt</string>
 				</dict>
@@ -348,3 +348,8 @@
 </plist>
 
 
+<!--
+	ChangeLog
+	[05/24/2012]
+	- Added IC tag, FNET_BUTTON(:330)
+-->
