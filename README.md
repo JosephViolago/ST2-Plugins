@@ -8,4 +8,4 @@ Install Instructions
 - (Optional) Backup the existing .tmLanguage file
 - Paste the corresponding .tmLanguage file in
 
-Linux: /home/<user>/.config/sublime-text-2/Packages/<Language>/'file'.tmLanguage
+Linux: /home/[user]/.config/sublime-text-2/Packages/[language]/[language].tmLanguage
