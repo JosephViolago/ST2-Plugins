@@ -2,51 +2,76 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 	<key>fileTypes</key>
 	<array>
 		<string>html</string>
 		<string>htm</string>
+		<string>tag</string>
 	</array>
 	<key>firstLineMatch</key>
 	<string>\[.+?\]</string>
 	<key>foldingStartMarker</key>
-	<string>(&lt;(?i:(head|table|tr|div|style|script|ul|ol|form|dl))\b.*?&gt;)</string>
+	<string>\[if\]</string>
 	<key>foldingStopMarker</key>
-	<string>(&lt;/(?i:(head|table|tr|div|style|script|ul|ol|form|dl))&gt;)</string>
-	<key>keyEquivalent</key>
-	<string>^~T</string>
+	<string>\[\/if\]</string>
 	<key>name</key>
 	<string>Interchange</string>
 	<key>patterns</key>
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(?=\[ *(PERL|perl|CALC|calc|calcn|CALCN|condition)\b.*? *\])</string>
-			<key>contentName</key>
-			<string>source.perl</string>
+			<string>(?i)\[ *(perl).*interpolate=[^ ]+</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.ic</string>
+				</dict>
+			</dict>
 			<key>end</key>
-			<string>(\[) */(PERL|perl|CALC|calc|calcn|CALCN|condition) *(\])</string>
+			<string>(?i)(\[) */(\1) *(\])</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.tag.template.tt</string>
+					<string>comment.block.ic</string>
 				</dict>
-				<key>1</key>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tmpl-container-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.perl</string>
+				</dict>
+
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?i)\[ *(calc) *\]</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.tag.tt</string>
+					<string>comment.block.ic</string>
 				</dict>
-				<key>2</key>
+			</dict>
+			<key>end</key>
+			<string>(?i)(\[) */(\1) *(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.tt</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.tt</string>
+					<string>comment.block.ic</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -63,11 +88,129 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(\[) *(COMMENT|comment) *(\])</string>
+			<string>(?i)(\[ *(calcn|perl)\b.*? *\])|Routine +&lt;&lt;EOR</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.ic</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>source.perl</string>
 			<key>end</key>
-			<string>(\[) */(COMMENT|comment) *(\])</string>
+			<string>(?i)(\[) */(\2) *(\])|EOR</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.ic</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.perl</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?i)(\[ *(tmpn|set) *(\w+) *\])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.ic</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.ic</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.ic</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>string.quoted.ic</string>
+			<key>end</key>
+			<string>(\[) */(\2) *(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.ic</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.ic</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?i)(\[) *comment *(\])</string>
+			<key>end</key> 
+			<string>(?i)(\[) */comment *(\])</string>
 			<key>name</key>
-			<string>comment.block.tt</string>
+			<string>comment.block.ic</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(__|@@)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.ic</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>variable.parameter.ic</string>
+			<key>end</key>
+			<string>\1</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.ic</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>@_</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.ic</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>variable.parameter.ic</string>
+			<key>end</key>
+			<string>_@</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.ic</string>
+				</dict>
+			</dict>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -75,17 +218,11 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>text.html.basic</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>source.perl</string>
+			<string>text.html.ic</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>embedded-code</key>
-		<dict/>
 		<key>entities</key>
 		<dict>
 			<key>patterns</key>
@@ -115,23 +252,8 @@
 					<key>name</key>
 					<string>invalid.illegal.bad-ampersand.html</string>
 				</dict>
-<!-- 				
-				<dict>
-					<key>name</key>
-					<string>constant.other.key.perl</string>
-				</dict>
--->
 			</array>
 		</dict>
-		<key>keyword</key>
-		<!-- <key>string-un-quoted</key> -->
-		<dict>
-			<key>match</key>
-			<string>\b([A-Za-z0-9_]+)</string>
-			<key>name</key>
-			<string>string.unquoted.tt</string>
-		</dict>
-		<!-- <key>#string-double-quoted</key> -->
 		<key>string-double-quoted</key>
 		<dict>
 			<key>begin</key>
@@ -141,7 +263,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.tt</string>
+					<string>punctuation.definition.string.begin.ic</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -151,16 +273,52 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.tt</string>
+					<string>punctuation.definition.string.end.ic</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.double.tt</string>
+			<string>string.quoted.double.ic</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#embedded-code</string>
+					<string>#tmpl-container-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#entities</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string-pipe-quoted</key>
+		<dict>
+			<key>begin</key>
+			<string>\|</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.ic</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\|</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.ic</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.pipe.ic</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tmpl-container-tag</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -177,7 +335,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.begin.tt</string>
+					<string>punctuation.definition.string.begin.ic</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -187,213 +345,20 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.tt</string>
+					<string>punctuation.definition.string.end.ic</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.single.tt</string>
+			<string>string.quoted.single.ic</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#embedded-code</string>
+					<string>#tmpl-container-tag</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#entities</string>
-				</dict>
-			</array>
-		</dict>
-		<key>string-grave-quoted</key>
-		<dict>
-			<key>begin</key>
-			<string>`</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.tt</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>`</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.tt</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.quoted.grave.tt</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#embedded-code</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#entities</string>
-				</dict>
-			</array>
-		</dict>
-<!-- 	
-		[06/17/2012] Attempt #1 at IC Tag Attribute Support
-		<key>tag-generic-attribute</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.key-value.tt</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			##Original## <string>\b([a-zA-Z-_:]+)\s*(=)</string>
-			##Attempt ## <string>\b(name|list|href|parse)\b\s*(=)</string>
-			<key>name</key>
-			<string>entity.other.attribute-name.tt</string>
-		</dict>
--->
-
-		<key>tag-generic-attribute</key>
-		<dict>
-			<key>match</key>
-			<string>\b([a-zA-Z\-:]+)</string>
-			<key>name</key>
-			<string>entity.other.attribute-name.tt</string>
-		</dict>
-		<key>tag-id-attribute</key>
-		<dict>
-			<key>begin</key>
-			<string>\b(name|list|href|parse)\b\s*(=)</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.other.attribute-name.id.tt</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.separator.key-value.tt</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>?\[='|"</string>
-			<key>name</key>
-			<string>meta.attribute-with-value.id.tt</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>"</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.begin.tt</string>
-						</dict>
-					</dict>
-					<key>contentName</key>
-					<string>meta.toc-list.id.tt</string>
-					<key>end</key>
-					<string>"</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.end.tt</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>#string-double-quoted</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#embedded-code</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#entities</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>'</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.begin.tt</string>
-						</dict>
-					</dict>
-					<key>contentName</key>
-					<string>meta.toc-list.id.tt</string>
-					<key>end</key>
-					<string>'</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.end.tt</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>#string-single-quoted</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#embedded-code</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#entities</string>
-						</dict>
-					</array>
-				</dict>
-			</array>
-		</dict>
-
-<!-- ###########################################################
-################################################################
-################################################################
-############################################################ -->
-		<key>tag-stuff</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#tag-generic-attribute</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-double-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-single-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-grave-quoted</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#keyword</string>
 				</dict>
 			</array>
 		</dict>
@@ -403,46 +368,81 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\[</string>
-					<key>captures</key>
+					<string>(\[/?)([A-Za-z\-_]+)</string>
+					<key>beginCaptures</key>
 					<dict>
-						<key>0</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.tag.tt</string>
+							<string>constant.character.ic</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.ic</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>\]</string>
+					<key>endCaptures</key> 
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>constant.character.ic</string>
+						</dict>
+					</dict>
 					<key>name</key>
-					<string>meta.tag.template.tt</string>
+					<string>control.operator.ic</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#tt-stuff</string>
+							<string>#ic-stuff</string>
 						</dict>
 					</array>
 				</dict>
 			</array>
 		</dict>
-		<key>tt-stuff</key>
+		<key>ic-stuff</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>(compare)\=(`|'|"|\|)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.tt</string>
+							<string>support.function.ic</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.ic</string>
 						</dict>
 					</dict>
-					<key>match</key>
-					<string>(#).*?(?=\])</string>
-					<key>name</key>
-					<string>comment.line.number-sign.tt</string>
+					<key>contentName</key>
+					<string>source.perl</string>
+					<key>end</key>
+					<string>\2</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.ic</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.perl</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -450,26 +450,64 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.double.filename.tt</string>
+							<string>support.function.perl</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.tt</string>
+							<string>control.operator.ic</string>
 						</dict>
-						<key>4</key>
+						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.tt</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.other.filename.tt</string>
+							<string>string.doublequoted.ic</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>((")([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+("))|(\b([a-z][a-z0-9_]+\/)+[a-z0-9_\.]+\b)</string>
+					<string>([A-Za-z\-_0-9]+)(=)([^\s\]"'\|]+)</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>This is a bad hack for things like the if scratch tag.</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.ic</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.perl</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(scratch|cgi|session|value|variable) +([0-9A-Za-z\-_\/\\]+)\b</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>variable.other.ic</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\!\~|!|!=|=~|&gt;=|&gt;|&lt;|%|&lt;=|\*|\+|-|eq|ne|lt|lte|gt|gte|&amp;|&amp;&amp;|\|\|)</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.ic</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b([A-Za-z0-9_\-\\\/]+)\b</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -481,74 +519,14 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#string-grave-quoted</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.variable.tt</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(\$?)\b[0-9]([0-9_]\.?)*\b</string>
-					<key>name</key>
-					<string>variable.other.tt</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?i:\b(?:(IF|END|INCLUDE|ELSE|ELSIF|FOREACH|FILTER|SCRATCH|SET|PERL|COMMENT|TEMPLATE|TMP|SETI|LOOP|VALUE(S)?|SESSION|ERROR|NAME|DATA|OBJECT|BOUNCE|CGI|CALC|CALCN|CURRENCY|L|LOC|AREA|FNET_BUTTON|STRIP|TMPN|CONDITION|DUMP|FLAG|ERRORBOX|QUERY))\b)</string>
-					<key>name</key>
-					<string>keyword.control.tt</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\||\|\||=|_|-|\*|\/|\?|:|div|mod|;|\+</string>
-					<key>name</key>
-					<string>keyword.operator.tt</string>
+					<string>#string-pipe-quoted</string>
 				</dict>
 			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>text.html.tt</string>
+	<string>source.ic.tags</string>
 	<key>uuid</key>
 	<string>67D0DEC7-9E8C-44B3-8FA5-ADD9BBA05DE3</string>
 </dict>
 </plist>
-
-
-<!--
-ChangeLog:
-	v1.1
-	[05/24/12]
-	- Added IC tag, FNET_BUTTON(:330)
-
-	v1.2
-	[06/13/12]
-	- Grave/Backtick Quote (`) Support (:205-240)
-		- Resolved: `... || []` string hangs open; 2nd grave doesn't close
-	[08/08/12]
-	- Added IC tags, STRIP|TMPN|CONDITION|DUMP|FLAG|ERRORBOX|QUERY
-
-
-ToDo:
-	- $Scratch->{key_name}
-		- > is not highlighted right
-	- match [if] with correpsonding [/if]
-		- [tmp], [tmpn], [perl], [set], [conditon], [L], [foreach], [filter]
-	- IC Tag attribute support (:250)
-	- (:132)#string-double-quoted (overworks) vs. string-double-quoted (broken)
-	- apostrophe (') inside [L]
-	  - make it ok for only x1(') to exist; don't look for a match inside tag
-	  - don't, dan's, users'
-		- test on templates/component/common/privacy_policy
-
-
-Reject:
-	- (?) support “ ” ’ (ASCII quote characters)
-		- I use UTF-8; so no need
-
--->
