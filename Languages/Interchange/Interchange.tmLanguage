@@ -21,16 +21,16 @@
     <array>
         <dict>
             <key>begin</key>
-            <!-- HTML.tmLanguage -->
-            <!-- <string>(&lt;)([a-zA-Z0-9:]++)(?=[^&gt;]*&gt;&lt;/\2&gt;)</string> -->
-            <!-- <string>(\[)([a-zA-Z0-9:]++)(?=[^\]]*\[\]/\2\])</string> -->
-            <string>(\[)([a-zA-Z0-9\-]+)(?=[^\]]*\[/\2\])</string>
+            <string>(\[/?)((?i:if|then|elsif|else|list|foreach|l|loc|tmp|tmpn|set|seti|errorbox|query|on-match|currency|time|perl|fnet_button)\b)</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
                 <dict>
                     <key>name</key>
-                    <string>punctuation.definition.tag.begin.ic</string>
+                    <string>
+                        punctuation.definition.tag.begin.ic
+                        constant.character.ic
+                    </string>
                 </dict>
                 <key>2</key>
                 <dict>
@@ -39,41 +39,72 @@
                 </dict>
             </dict>
             <key>end</key>
-            <!-- HTML.tmLanguage -->
-            <!-- <string>(&gt;)(&lt;)(/)(\2)(&gt;)</string> -->
-            <string>(\])(/[)(/)(\2)(\])</string>
+            <string>\]</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        punctuation.definition.tag.end.ic
+                        constant.character.ic
+                    </string>
+                </dict>
+            </dict>
+            <key>name</key>
+            <string>meta.tag.block.any.ic</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#tag-structure</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#ic-stuff</string>
+                </dict>
+            </array>
+        </dict>
+        <dict>
+            <key>begin</key>
+            <string>(\[)((?i:scratch|scratchd|value|area|template|include|data|userdb|setlocale|error)\b)</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        punctuation.definition.tag.begin.ic
+                        constant.character.ic
+                    </string>
+                </dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.name.tag.inline.any.ic</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>(\])</string>
             <key>endCaptures</key>
             <dict>
                 <key>1</key>
                 <dict>
                     <key>name</key>
-                    <string>punctuation.definition.tag.end.ic</string>
-                </dict>
-                <key>2</key>
-                <dict>
-                    <key>name</key>
-                    <string>punctuation.definition.tag.begin.ic meta.scope.between-tag-pair.ic</string>
-                </dict>
-                <key>3</key>
-                <dict>
-                    <key>name</key>
-                    <string>punctuation.definition.tag.begin.ic</string>
-                </dict>
-                <key>4</key>
-                <dict>
-                    <key>name</key>
-                    <string>entity.name.tag.ic</string>
-                </dict>
-                <key>5</key>
-                <dict>
-                    <key>name</key>
-                    <string>punctuation.definition.tag.end.ic</string>
+                    <string>
+                        punctuation.definition.tag.end.ic
+                        constant.character.ic
+                    </string>
                 </dict>
             </dict>
             <key>name</key>
-            <string>meta.tag.any.ic</string>
+            <string>meta.tag.inline.any.ic</string>
             <key>patterns</key>
             <array>
+                <dict>
+                    <key>include</key>
+                    <string>#tag-structure</string>
+                </dict>
                 <dict>
                     <key>include</key>
                     <string>#ic-stuff</string>
@@ -106,7 +137,7 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -142,7 +173,7 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -153,18 +184,24 @@
         -->
         <dict>
             <key>begin</key>
-            <string>(?i)(\[ *(calcn|condition|perl)\b.*? *\])|Routine &lt;&lt;EOR</string>
+            <string>(?i)(\[*((?i:calcn|condition|perl)\b).*? *\])|Routine &lt;&lt;EOR</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
                 <dict>
                     <key>name</key>
-                    <string>constant.character.ic</string>
+                    <string>
+                        punctuation.definition.tag.begin.ic
+                        constant.character.ic
+                    </string>
                 </dict>
                 <key>2</key>
                 <dict>
                     <key>name</key>
-                    <string>entity.name.function.ic</string>
+                    <string>
+                        entity.name.tag.ic
+                        entity.name.function.ic
+                    </string>
                 </dict>
             </dict>
             <key>contentName</key>
@@ -176,19 +213,25 @@
                 <key>1</key>
                 <dict>
                     <key>name</key>
-                    <string>constant.character.ic</string>
+                    <string>
+                        punctuation.definition.tag.end.ic
+                        constant.character.ic
+                    </string>
                 </dict>
                 <key>2</key>
                 <dict>
                     <key>name</key>
-                    <string>entity.name.function.ic</string>
+                    <string>
+                        entity.name.tag.ic
+                        entity.name.function.ic
+                    </string>
                 </dict>
             </dict>
             <key>patterns</key>
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -231,7 +274,7 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -242,18 +285,18 @@
         -->
         <dict>
             <key>begin</key>
-            <string>(?i)(\[ *(tmpn|set|perl) *(\w+) *\])</string>
+            <string>(?i)(\[ *(tmp|tmpn|set|seti)\b *(\w+) *\])</string>
             <key>beginCaptures</key>
             <dict>
-                <key>0</key>
+                <key>1</key>
                 <dict>
                     <key>name</key>
-                    <string>constant.character.ic</string>
+                    <string>constant.character.ic punctuation.definition.tag.begin.ic</string>
                 </dict>
                 <key>2</key>
                 <dict>
                     <key>name</key>
-                    <string>entity.name.tag.ic</string>
+                    <string>keyword.control.ic entity.name.tag.ic</string>
                 </dict>
                 <key>3</key>
                 <dict>
@@ -278,14 +321,14 @@
                     <string>keyword.control.ic</string>
                 </dict>
             </dict>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>(?i)(\[) *comment *(\])</string>
-            <key>end</key> 
-            <string>(?i)(\[) */comment *(\])</string>
-            <key>name</key>
-            <string>comment.block.ic</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#tag-structure</string>
+                </dict>
+            </array>
+
         </dict>
         <dict>
             <key>begin</key>
@@ -335,11 +378,56 @@
                 </dict>
             </dict>
         </dict>
-
+        <dict>
+            <key>begin</key>
+            <string>(?i)(\[ *(comment) *\])</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        punctuation.definition.tag.begin.ic
+                        constant.character.ic
+                    </string>
+                </dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        entity.name.tag.ic
+                    </string>
+                </dict>
+            </dict>
+            <key>contentName</key>
+            <string>comment.block.ic</string>
+            <key>end</key> 
+            <string>(?i)(\[ */(comment) *\])</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        punctuation.definition.tag.end.ic
+                        constant.character.ic
+                    </string>
+                </dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        entity.name.tag.ic
+                    </string>
+                </dict>
+            </dict>
+            <key>name</key>
+            <string>meta.tag.block.any.ic</string>
+        </dict>
         <!-- Include patterns -->
         <dict>
             <key>include</key>
-            <string>#tmpl-container-tag</string>
+            <string>#tag-structure</string>
         </dict>
         <dict>
             <key>include</key>
@@ -421,7 +509,7 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -457,7 +545,7 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -525,7 +613,7 @@
             <array>
                 <dict>
                     <key>include</key>
-                    <string>#tmpl-container-tag</string>
+                    <string>#tag-structure</string>
                 </dict>
                 <dict>
                     <key>include</key>
@@ -554,13 +642,13 @@
         </dict>
         -->
 
-        <key>tmpl-container-tag</key>
+        <key>tag-structure</key>
         <dict>
             <key>patterns</key>
             <array>
                 <dict>
                     <key>begin</key>
-                    <string>(\[)(/?)([A-Za-z\-_]+)</string>
+                    <string>(\[)(/?)([A-Za-z\-_]+) (\w+)?</string>
                     <key>beginCaptures</key>
                     <dict>
                         <key>1</key>
@@ -577,6 +665,11 @@
                         <dict>
                             <key>name</key>
                             <string>keyword.control.ic</string>
+                        </dict>
+                        <key>4</key>
+                        <dict>
+                            <key>name</key>
+                            <string>support.function.ic</string>
                         </dict>
                     </dict>
                     <key>end</key>
@@ -596,6 +689,10 @@
                         <dict>
                             <key>include</key>
                             <string>#ic-stuff</string>
+                        </dict>
+                        <dict>
+                            <key>include</key>
+                            <string>$self</string>
                         </dict>
                     </array>
                 </dict>
@@ -774,23 +871,34 @@ ChangeLog:
             - [08/09/12]: Assigned to Nick
         - $Scratch->{key_name}
             - > is not highlighted right
+        - perl hash => key (really just '=>') support
+          - see constant.other.key.perl (??? maybe)
+          - fixed w/ more definitive embedded perl defs
     - v2.1 add:
         - grave-quote fix from v1.2
     [08/29/12]
     - v2.1 add
-        - [perl] inline-perl colors & definitions
+        - [perl] embedded-perl colors & definitions
+    [09/07/12]
+    - v2.1 add
+        - Matching paired tags (pattern1)
+        - Defined unpaired tags (pattern2)
 
 
 
 ToDo:
-    - match [if] with correpsonding [/if]
+    ^ match [if] with correpsonding [/if]
         - [tmp], [tmpn], [perl], [set], [conditon], [L], [foreach], [filter]
         - interpolate vs. non-interpolate
-          - interpolate: calc, perl interpolate=<anything but 0>
-          - non-interpolate: calcn, perl
-    - (:132)#string-double-quoted (overworks) vs. string-double-quoted (broken)
-    - perl hash => key (really just '=>') support
-      - see constant.other.key.perl (??? maybe)
+          - interpolate: calc, perl interpolate=<anything but 0>, seti, tmp
+          - non-interpolate: calcn, perl, set, tmpn
+          - ???: [L] [l] [loc]
+    NEW:
+    - lost HTML comment <!-- hotkey support
+    - add [comment][/comment] keybind support
+    - IC-tags to work inside attribute values ""
+        - 05_view coupon_popup
+    X [error_box] green (like perl|condition) but not embedded perl
 
 
 Reject:
