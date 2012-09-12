@@ -19,6 +19,78 @@
     <string>Interchange</string>
     <key>patterns</key>
     <array>
+
+        <!--
+        <dict>
+            <key>begin</key>
+            <string>(?i)\[ *(perl).*interpolate=[^ ]+</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>comment.block.ic</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>(?i)(\[) */(\1) *(\])</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>comment.block.ic</string>
+                </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#tmpl-container-tag</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>source.perl</string>
+                </dict>
+
+            </array>
+        </dict>
+        -->
+        <!--
+        <dict>
+            <key>begin</key>
+            <string>(?i)\[ *(calc) *\]</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>comment.block.ic</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>(?i)(\[) */(\1) *(\])</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>comment.block.ic</string>
+                </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#tmpl-container-tag</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>source.perl</string>
+                </dict>
+            </array>
+        </dict>
+        -->
         <dict>
             <key>begin</key>
             <string>(?i)(\[ *(calcn|perl)\b.*? *\])|Routine &lt;&lt;EOR</string>
@@ -36,20 +108,15 @@
                 </dict>
             </dict>
             <key>contentName</key>
-            <string>source.perl.embedded.ic</string>
+            <string>source.perl</string>
             <key>end</key>
-            <string>(?i)(\[*/(\2) *\])|EOR</string>
+            <string>(?i)(\[ */(\2) *\])|EOR</string>
             <key>endCaptures</key>
             <dict>
-                <key>1</key>
+                <key>3</key>
                 <dict>
                     <key>name</key>
                     <string>constant.character.ic</string>
-                </dict>
-                <key>2</key>
-                <dict>
-                    <key>name</key>
-                    <string>entity.name.function</string>
                 </dict>
             </dict>
             <key>patterns</key>
@@ -64,12 +131,56 @@
                 </dict>
             </array>
         </dict>
+        <!--
         <dict>
             <key>begin</key>
-            <string>(?i)(\[ *(tmpn|set) *(\w+) *\])</string>
+            <string>(?=\[ *(PERL|perl|CALC|calc|CALCN|calcn|CONDITION|condition)\b.*? *\])</string>
+            <key>contentName</key>
+            <string>source.perl</string>
+            <key>end</key>
+            <string>(\[) */(PERL|perl|CALC|calc|CALCN|calcn|CONDITION|condition) *(\])</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>meta.tag.template.ic</string>
+                </dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.tag.ic</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                    <key>name</key>
+                    <string>entity.name.tag.ic</string>
+                </dict>
+                <key>3</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.tag.ic</string>
+                </dict>
+            </dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#tmpl-container-tag</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>source.perl</string>
+                </dict>
+            </array>
+        </dict>
+        -->
+        <dict>
+            <key>begin</key>
+            <string>(?i)(\[ *(tmpn|set|perl) *(\w+) *\])</string>
             <key>beginCaptures</key>
             <dict>
-                <key>1</key>
+                <key>0</key>
                 <dict>
                     <key>name</key>
                     <string>constant.character.ic</string>
@@ -86,7 +197,7 @@
                 </dict>
             </dict>
             <key>contentName</key>
-            <string>source.perl.embedded.ic</string>
+            <string>meta.tag.template.ic</string>
             <key>end</key>
             <string>(\[*/ *(\2) *\])</string>
             <key>endCaptures</key>
@@ -102,12 +213,6 @@
                     <string>keyword.control.ic</string>
                 </dict>
             </dict>
-            <key>patterns</key>
-            <dict>
-                <key>include</key>
-                <string>source.perl</string>
-            </dict>
-            <!-- ===[ NO NAME? ]=== -->
         </dict>
         <dict>
             <key>begin</key>
@@ -165,8 +270,6 @@
                 </dict>
             </dict>
         </dict>
-
-        <!-- Include patterns -->
         <dict>
             <key>include</key>
             <string>#tmpl-container-tag</string>
@@ -176,18 +279,6 @@
             <string>text.html.ic</string>
         </dict>
     </array>
-
-    <!-- ###################################################################
-    ########################################################################
-    ########   ____                      _ _                        ########
-    ########  |  _ \ ___ _ __   ___  ___(_) |_ ___  _ __ _   _      ########
-    ########  | |_) / _ \ '_ \ / _ \/ __| | __/ _ \| '__| | | |     ########
-    ########  |  _ <  __/ |_) | (_) \__ \ | || (_) | |  | |_| |     ########
-    ########  |_| \_\___| .__/ \___/|___/_|\__\___/|_|   \__, |     ########
-    ########            |_|                              |___/      ########
-    ########################################################################
-    #################################################################### -->
-
     <key>repository</key>
     <dict>
         <key>entities</key>
@@ -388,7 +479,7 @@
             <array>
                 <dict>
                     <key>begin</key>
-                    <string>(\[/?)([A-Za-z\-_]+)</string>
+                    <string>(\[)(/?)([A-Za-z\-_]+)</string>
                     <key>beginCaptures</key>
                     <dict>
                         <key>1</key>
@@ -397,6 +488,11 @@
                             <string>constant.character.ic</string>
                         </dict>
                         <key>2</key>
+                        <dict>
+                            <key>name</key>
+                            <string>constant.character.ic</string>
+                        </dict>
+                        <key>3</key>
                         <dict>
                             <key>name</key>
                             <string>keyword.control.ic</string>
@@ -427,13 +523,6 @@
 
         <!-- ###########################################################
         ################################################################
-        ####     __   ___ ____   __   ____  _          __  __       ####
-        ####    | _| |_ _/ ___| |_ | / ___|| |_ _   _ / _|/ _|      ####
-        ####    | |   | | |      | | \___ \| __| | | | |_| |_       ####
-        ####    | |   | | |___   | |  ___) | |_| |_| |  _|  _|      ####
-        ####    | |  |___\____|  | | |____/ \__|\__,_|_| |_|        ####
-        ####    |__|            |__|                                ####
-        ####                                                        ####
         ################################################################
         ############################################################ -->
 
@@ -458,7 +547,7 @@
                         </dict>
                     </dict>
                     <key>contentName</key>
-                    <string>source.perl.embedded.ic</string>
+                    <string>source.perl</string>
                     <key>end</key>
                     <string>\2</string>
                     <key>endCaptures</key>
