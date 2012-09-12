@@ -21,11 +21,11 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>(?=\[ *(PERL|perl|CALC|calc|calcn|CALCN)\b.*? *\])</string>
+			<string>(?=\[ *(PERL|perl|CALC|calc|calcn|CALCN|condition)\b.*? *\])</string>
 			<key>contentName</key>
 			<string>source.perl</string>
 			<key>end</key>
-			<string>(\[) */(PERL|perl|CALC|calc|calcn|CALCN) *(\])</string>
+			<string>(\[) */(PERL|perl|CALC|calc|calcn|CALCN|condition) *(\])</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
@@ -77,6 +77,10 @@
 			<key>include</key>
 			<string>text.html.basic</string>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.perl</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
@@ -111,15 +115,23 @@
 					<key>name</key>
 					<string>invalid.illegal.bad-ampersand.html</string>
 				</dict>
+<!-- 				
+				<dict>
+					<key>name</key>
+					<string>constant.other.key.perl</string>
+				</dict>
+-->
 			</array>
 		</dict>
 		<key>keyword</key>
+		<!-- <key>string-un-quoted</key> -->
 		<dict>
 			<key>match</key>
 			<string>\b([A-Za-z0-9_]+)</string>
 			<key>name</key>
 			<string>string.unquoted.tt</string>
 		</dict>
+		<!-- <key>#string-double-quoted</key> -->
 		<key>string-double-quoted</key>
 		<dict>
 			<key>begin</key>
@@ -192,6 +204,44 @@
 				</dict>
 			</array>
 		</dict>
+		<key>string-grave-quoted</key>
+		<dict>
+			<key>begin</key>
+			<string>`</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.tt</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>`</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.tt</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.grave.tt</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#entities</string>
+				</dict>
+			</array>
+		</dict>
+<!-- 	
+		[06/17/2012] Attempt #1 at IC Tag Attribute Support
 		<key>tag-generic-attribute</key>
 		<dict>
 			<key>captures</key>
@@ -203,10 +253,124 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b([a-zA-Z-_:]+)\s*(=)</string>
+			##Original## <string>\b([a-zA-Z-_:]+)\s*(=)</string>
+			##Attempt ## <string>\b(name|list|href|parse)\b\s*(=)</string>
 			<key>name</key>
 			<string>entity.other.attribute-name.tt</string>
 		</dict>
+-->
+
+		<key>tag-generic-attribute</key>
+		<dict>
+			<key>match</key>
+			<string>\b([a-zA-Z\-:]+)</string>
+			<key>name</key>
+			<string>entity.other.attribute-name.tt</string>
+		</dict>
+		<key>tag-id-attribute</key>
+		<dict>
+			<key>begin</key>
+			<string>\b(name|list|href|parse)\b\s*(=)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.other.attribute-name.id.tt</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.key-value.tt</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>?\[='|"</string>
+			<key>name</key>
+			<string>meta.attribute-with-value.id.tt</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tt</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.toc-list.id.tt</string>
+					<key>end</key>
+					<string>"</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tt</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>#string-double-quoted</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#embedded-code</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#entities</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>'</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.tt</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>meta.toc-list.id.tt</string>
+					<key>end</key>
+					<string>'</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.tt</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>#string-single-quoted</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#embedded-code</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#entities</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+
+<!-- ###########################################################
+################################################################
+################################################################
+############################################################ -->
 		<key>tag-stuff</key>
 		<dict>
 			<key>patterns</key>
@@ -222,6 +386,10 @@
 				<dict>
 					<key>include</key>
 					<string>#string-single-quoted</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-grave-quoted</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -312,6 +480,10 @@
 					<string>#string-single-quoted</string>
 				</dict>
 				<dict>
+					<key>include</key>
+					<string>#string-grave-quoted</string>
+				</dict>
+				<dict>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -327,7 +499,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?i:\b(?:(IF|END|INCLUDE|ELSE|ELSIF|FOREACH|FILTER|SCRATCH|SET|PERL|COMMENT|TEMPLATE|TMP|SETI|LOOP|VALUE(S)?|SESSION|ERROR|NAME|DATA|OBJECT|BOUNCE|CGI|CALC|CALCN|CURRENCY|L|LOC|AREA|FNET_BUTTON))\b)</string>
+					<string>(?i:\b(?:(IF|END|INCLUDE|ELSE|ELSIF|FOREACH|FILTER|SCRATCH|SET|PERL|COMMENT|TEMPLATE|TMP|SETI|LOOP|VALUE(S)?|SESSION|ERROR|NAME|DATA|OBJECT|BOUNCE|CGI|CALC|CALCN|CURRENCY|L|LOC|AREA|FNET_BUTTON|STRIP|TMPN|CONDITION|DUMP|FLAG|ERRORBOX|QUERY))\b)</string>
 					<key>name</key>
 					<string>keyword.control.tt</string>
 				</dict>
@@ -347,8 +519,36 @@
 </dict>
 </plist>
 
+
 <!--
-	ChangeLog
-	[05/24/2012]
+ChangeLog:
+	v1.1
+	[05/24/12]
 	- Added IC tag, FNET_BUTTON(:330)
+
+	v1.2
+	[06/13/12]
+	- Grave/Backtick Quote (`) Support (:205-240)
+		- Resolved: `... || []` string hangs open; 2nd grave doesn't close
+	[08/08/12]
+	- Added IC tags, STRIP|TMPN|CONDITION|DUMP|FLAG|ERRORBOX|QUERY
+
+
+ToDo:
+	- $Scratch->{key_name}
+		- > is not highlighted right
+	- match [if] with correpsonding [/if]
+		- [tmp], [tmpn], [perl], [set], [conditon], [L], [foreach], [filter]
+	- IC Tag attribute support (:250)
+	- (:132)#string-double-quoted (overworks) vs. string-double-quoted (broken)
+	- apostrophe (') inside [L]
+	  - make it ok for only x1(') to exist; don't look for a match inside tag
+	  - don't, dan's, users'
+		- test on templates/component/common/privacy_policy
+
+
+Reject:
+	- (?) support “ ” ’ (ASCII quote characters)
+		- I use UTF-8; so no need
+
 -->
