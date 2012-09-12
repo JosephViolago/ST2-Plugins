@@ -21,7 +21,7 @@
     <array>
         <dict>
             <key>begin</key>
-            <string>(\[/?)((?i:if|then|elsif|else|list|foreach|l|loc|tmp|tmpn|set|seti|errorbox|query|on-match|currency|time|perl|fnet_button)\b)</string>
+            <string>(\[/?)((?i:if|then|elsif|else|list|foreach|l|loc|tmp|tmpn|set|seti|errorbox|query|on-match|currency|time|strip|filter|fnet_button)\b)</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
@@ -184,14 +184,20 @@
         -->
         <dict>
             <key>begin</key>
-            <string>(?i)(\[*((?i:calcn|condition|perl)\b).*? *\])|Routine &lt;&lt;EOR</string>
+            <string>(?i)(\[*((?i:calcn|calc|condition|perl)\b).*? *\])|((\w*) *&lt;&lt;(EOR|EOF))</string>
             <key>beginCaptures</key>
             <dict>
-                <key>1</key>
+                <key>0</key>
                 <dict>
                     <key>name</key>
                     <string>
                         punctuation.definition.tag.begin.ic
+                    </string>
+                </dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>
                         constant.character.ic
                     </string>
                 </dict>
@@ -200,6 +206,28 @@
                     <key>name</key>
                     <string>
                         entity.name.tag.ic
+                        entity.name.function.ic
+                    </string>
+                </dict>
+                <key>3</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        constant.character.ic
+                    </string>
+                </dict>
+                <key>4</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        entity.name.tag.ic
+                        punctuation.definition.tag.begin.ic
+                    </string>
+                </dict>
+                <key>5</key>
+                <dict>
+                    <key>name</key>
+                    <string>
                         entity.name.function.ic
                     </string>
                 </dict>
@@ -207,10 +235,10 @@
             <key>contentName</key>
             <string>source.perl.embedded.ic</string>
             <key>end</key>
-            <string>(?i)(\[ */(\2) *\])|EOR</string>
+            <string>\[ */(\2) *\]|^(EOF|EOR)$</string>
             <key>endCaptures</key>
             <dict>
-                <key>1</key>
+                <key>0</key>
                 <dict>
                     <key>name</key>
                     <string>
@@ -218,15 +246,29 @@
                         constant.character.ic
                     </string>
                 </dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        punctuation.definition.tag.ic
+                        entity.name.function.ic
+                    </string>
+                </dict>
                 <key>2</key>
                 <dict>
                     <key>name</key>
                     <string>
-                        entity.name.tag.ic
+                        punctuation.definition.tag.ic
                         entity.name.function.ic
                     </string>
                 </dict>
+
             </dict>
+            <key>name</key>
+            <string>
+                source.perl.embedded.ic
+                meta.tag.block.any.ic
+            </string>
             <key>patterns</key>
             <array>
                 <dict>
@@ -237,52 +279,12 @@
                     <key>include</key>
                     <string>source.perl</string>
                 </dict>
-            </array>
-        </dict>
-        <!--
-        <dict>
-            <key>begin</key>
-            <string>(?=\[ *(PERL|perl|CALC|calc|CALCN|calcn|CONDITION|condition)\b.*? *\])</string>
-            <key>contentName</key>
-            <string>source.perl</string>
-            <key>end</key>
-            <string>(\[) */(PERL|perl|CALC|calc|CALCN|calcn|CONDITION|condition) *(\])</string>
-            <key>endCaptures</key>
-            <dict>
-                <key>0</key>
-                <dict>
-                    <key>name</key>
-                    <string>meta.tag.template.ic</string>
-                </dict>
-                <key>1</key>
-                <dict>
-                    <key>name</key>
-                    <string>punctuation.definition.tag.ic</string>
-                </dict>
-                <key>2</key>
-                <dict>
-                    <key>name</key>
-                    <string>entity.name.tag.ic</string>
-                </dict>
-                <key>3</key>
-                <dict>
-                    <key>name</key>
-                    <string>punctuation.definition.tag.ic</string>
-                </dict>
-            </dict>
-            <key>patterns</key>
-            <array>
                 <dict>
                     <key>include</key>
-                    <string>#tag-structure</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>source.perl</string>
+                    <string>$self</string>
                 </dict>
             </array>
         </dict>
-        -->
         <dict>
             <key>begin</key>
             <string>(?i)(\[ *(tmp|tmpn|set|seti)\b *(\w+) *\])</string>
@@ -396,13 +398,21 @@
                     <key>name</key>
                     <string>
                         entity.name.tag.ic
+                        comment.line.ic
+                    </string>
+                </dict>
+                <key>3</key>
+                <dict>
+                    <key>name</key>
+                    <string>
+                        comment.block.ic
                     </string>
                 </dict>
             </dict>
             <key>contentName</key>
             <string>comment.block.ic</string>
             <key>end</key> 
-            <string>(?i)(\[ */(comment) *\])</string>
+            <string>(?i)(\[ *(/comment) *\])</string>
             <key>endCaptures</key>
             <dict>
                 <key>1</key>
@@ -418,11 +428,15 @@
                     <key>name</key>
                     <string>
                         entity.name.tag.ic
+                        comment.line.ic
                     </string>
                 </dict>
             </dict>
             <key>name</key>
-            <string>meta.tag.block.any.ic</string>
+            <string>
+                comment.block.ic
+                meta.tag.block.any.ic
+            </string>
         </dict>
         <!-- Include patterns -->
         <dict>
@@ -899,6 +913,7 @@ ToDo:
     - IC-tags to work inside attribute values ""
         - 05_view coupon_popup
     X [error_box] green (like perl|condition) but not embedded perl
+    - format [perl|calcn|condition] stuff to revamped [comment]
 
 
 Reject:
